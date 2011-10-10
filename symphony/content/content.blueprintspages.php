@@ -14,6 +14,7 @@
 	require_once(TOOLKIT . '/class.datasourcemanager.php');
 	require_once(TOOLKIT . '/class.pagemanager.php');
 	require_once(TOOLKIT . '/class.xsltprocess.php');
+	require_once(TOOLKIT . '/class.ui.php');
 
 	class contentBlueprintsPages extends AdministrationPage {
 
@@ -132,9 +133,6 @@
 
 			$this->Form->appendChild($table);
 
-			$tableActions = new XMLElement('div');
-			$tableActions->setAttribute('class', 'actions');
-
 			$options = array(
 				array(null, false, __('With Selected...')),
 				array('delete', false, __('Delete'), 'confirm', null, array(
@@ -142,10 +140,7 @@
 				))
 			);
 
-			$tableActions->appendChild(Widget::Select('with-selected', $options));
-			$tableActions->appendChild(Widget::Input('action[apply]', __('Apply'), 'submit'));
-
-			$this->Form->appendChild($tableActions);
+			$this->Form->appendChild(UI::WithSelected($options));
 		}
 
 		public function __viewTemplate() {
@@ -373,50 +368,8 @@
 				Widget::Anchor(__('Pages'), SYMPHONY_URL . '/blueprints/pages/'),
 			));
 
-		// Title --------------------------------------------------------------
-
-			$fieldset = new XMLElement('fieldset');
-			$fieldset->setAttribute('class', 'settings');
-			$fieldset->appendChild(new XMLElement('legend', __('Page Settings')));
-
-			$label = Widget::Label(__('Title'));
-			$label->appendChild(Widget::Input(
-				'fields[title]', General::sanitize($fields['title'])
-			));
-
-			if(isset($this->_errors['title'])) {
-				$label = Widget::wrapFormElementWithError($label, $this->_errors['title']);
-			}
-
-			$fieldset->appendChild($label);
-
-		// Handle -------------------------------------------------------------
-
-			$group = new XMLElement('div');
-			$group->setAttribute('class', 'group');
-			$column = new XMLElement('div');
-
-			$label = Widget::Label(__('URL Handle'));
-			$label->appendChild(Widget::Input(
-				'fields[handle]', $fields['handle']
-			));
-
-			if(isset($this->_errors['handle'])) {
-				$label = Widget::wrapFormElementWithError($label, $this->_errors['handle']);
-			}
-
-			$column->appendChild($label);
-
-		// Parent ---------------------------------------------------------
-
-			$label = Widget::Label(__('Parent Page'));
-
-			$where = array(
-				sprintf('id != %d', $page_id)
-			);
-			$pages = PageManager::fetch(false, array('id'), $where, 'title ASC');
-
-			$options = array(
+			$pages = PageManager::fetch(false, array('id'), array(sprintf('id != %d', $page_id)), 'title ASC');
+			$pages_options = array(
 				array('', false, '/')
 			);
 
@@ -428,98 +381,94 @@
 				}
 
 				foreach ($pages as $page) {
-					$options[] = array(
+					$pages_options[] = array(
 						$page['id'], $fields['parent'] == $page['id'],
 						'/' . PageManager::resolvePagePath($page['id'])
 					);
 				}
 
-				usort($options, '__compare_pages');
+				usort($pages_options, '__compare_pages');
 			}
-
-			$label->appendChild(Widget::Select(
-				'fields[parent]', $options
-			));
-			$column->appendChild($label);
-			$group->appendChild($column);
-
-		// Parameters ---------------------------------------------------------
-
-			$column = new XMLElement('div');
-			$label = Widget::Label(__('URL Parameters'));
-			$label->appendChild(Widget::Input(
-				'fields[params]', $fields['params']
-			));
-			$column->appendChild($label);
-
-		// Type -----------------------------------------------------------
-
-			$label = Widget::Label(__('Page Type'));
-			$label->appendChild(Widget::Input('fields[type]', $fields['type']));
-
-			if(isset($this->_errors['type'])) {
-				$label = Widget::wrapFormElementWithError($label, $this->_errors['type']);
-			}
-
-			$column->appendChild($label);
-
-			$tags = new XMLElement('ul');
-			$tags->setAttribute('class', 'tags');
-
-			$types = PageManager::fetchAvailablePageTypes();
-			foreach($types as $type) {
-				$tags->appendChild(new XMLElement('li', $type));
-			}
-
-			$column->appendChild($tags);
-			$group->appendChild($column);
-			$fieldset->appendChild($group);
-			$this->Form->appendChild($fieldset);
-
-		// Events -------------------------------------------------------------
-
-			$fieldset = new XMLElement('fieldset');
-			$fieldset->setAttribute('class', 'settings');
-			$fieldset->appendChild(new XMLElement('legend', __('Page Resources')));
-
-			$group = new XMLElement('div');
-			$group->setAttribute('class', 'group');
-
-			$label = Widget::Label(__('Events'));
 
 			$events = EventManager::listAll();
-			$options = array();
+			$events_options = array();
 
 			if(is_array($events) && !empty($events)) {
 				if(!is_array($fields['events'])) $fields['events'] = array();
-				foreach ($events as $name => $about) $options[] = array(
+				foreach ($events as $name => $about) $events_options[] = array(
 					$name, in_array($name, $fields['events']), $about['name']
 				);
 			}
 
-			$label->appendChild(Widget::Select('fields[events][]', $options, array('multiple' => 'multiple')));
-			$group->appendChild($label);
-
-		// Data Sources -------------------------------------------------------
-
-			$label = Widget::Label(__('Data Sources'));
-
 			$datasources = DatasourceManager::listAll();
-			$options = array();
+			$datasources_options = array();
 
 			if(is_array($datasources) && !empty($datasources)) {
 				if(!is_array($fields['data_sources'])) $fields['data_sources'] = array();
-				foreach ($datasources as $name => $about) $options[] = array(
+				foreach ($datasources as $name => $about) $datasources_options[] = array(
 					$name, in_array($name, $fields['data_sources']), $about['name']
 				);
 			}
 
-			$label->appendChild(Widget::Select('fields[data_sources][]', $options, array('multiple' => 'multiple')));
-			$group->appendChild($label);
-			$fieldset->appendChild($group);
-			$this->Form->appendChild($fieldset);
+			$this->Form->appendChild(UI::Setting(
+				__('Page Settings'),
 
-		// Controls -----------------------------------------------------------
+				UI::HorizontalGrid(
+
+					// Title --------------------------------------------------------------
+					UI::Error(
+						Widget::Label(__('Title'), Widget::Input('fields[title]', General::sanitize($fields['title']))),
+						$this->_errors['title'],
+						isset($this->_errors['title'])
+					),
+
+					UI::TwoColumnsGrid(
+
+					// Handle -------------------------------------------------------------
+						UI::Error(
+							Widget::Label(__('URL Handle'), Widget::Input('fields[handle]', $fields['handle'])),
+							$this->_errors['handle'],
+							isset($this->_errors['handle'])
+						),
+
+					// Parameters ---------------------------------------------------------
+						Widget::Label(__('URL Parameters'), Widget::Input('fields[params]', $fields['params']))
+					),
+
+					UI::TwoColumnsGrid(
+
+					// Parent -------------------------------------------------------------
+						Widget::Label(__('Parent Page'), Widget::Select('fields[parent]', $pages_options)),
+
+						UI::HorizontalGrid(
+
+					// Type ---------------------------------------------------------------
+							UI::Error(
+								Widget::Label(__('Page Type'), Widget::Input('fields[type]', $fields['type'])),
+								$this->_errors['type'],
+								isset($this->_errors['type'])
+							),
+
+							UI::Tags(PageManager::fetchAvailablePageTypes())
+
+						)
+					)
+				)
+			));
+
+			$this->Form->appendChild(UI::Setting(
+				__('Page Resources'),
+
+				UI::TwoColumnsGrid(
+
+					// Events -------------------------------------------------------------
+					Widget::Label(__('Events'), Widget::Select('fields[events][]', $events_options, array('multiple' => 'multiple'))),
+
+					// Data Sources -------------------------------------------------------
+					Widget::Label(__('Data Sources'), Widget::Select('fields[data_sources][]', $datasources_options, array('multiple' => 'multiple')))
+				)
+
+			));
 
 			/**
 			 * After all Page related Fields have been added to the DOM, just before the
@@ -542,23 +491,15 @@
 				)
 			);
 
-			$div = new XMLElement('div');
-			$div->setAttribute('class', 'actions');
-			$div->appendChild(Widget::Input(
-				'action[save]', ($this->_context[0] == 'edit' ? __('Save Changes') : __('Create Page')),
-				'submit', array('accesskey' => 's')
+			$this->Form->appendChild(UI::BottomActions(
+				($this->_context[0] == 'edit' ? '' : __('Create Page')),
+				$this->_context[0] == 'edit',
+				__('Delete this page'),
+				__('Are you sure you want to delete this page?')
 			));
 
-			if($this->_context[0] == 'edit'){
-				$button = new XMLElement('button', __('Delete'));
-				$button->setAttributeArray(array('name' => 'action[delete]', 'class' => 'button confirm delete', 'title' => __('Delete this page'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to delete this page?')));
-				$div->appendChild($button);
-			}
-
-			$this->Form->appendChild($div);
-
 			if(isset($_REQUEST['parent']) && is_numeric($_REQUEST['parent'])){
-				$this->Form->appendChild(new XMLElement('input', NULL, array('type' => 'hidden', 'name' => 'parent', 'value' => $_REQUEST['parent'])));
+				$this->Form->appendChild(Widget::Input('parent', $_REQUEST['parent'], 'hidden'));
 			}
 		}
 
