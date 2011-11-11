@@ -43,8 +43,8 @@
 	define('DOCROOT', rtrim(dirname(__FILE__), '\\/'));
 
 	// Required system components
-	require_once(DOCROOT . '/symphony/lib/boot/func.utilities.php');
-	require_once(DOCROOT . '/symphony/lib/boot/defines.php');
+	require_once(DOCROOT . '/symphony/lib/include.utilities.php');
+	require_once(DOCROOT . '/symphony/lib/include.defines.php');
 	require_once(TOOLKIT . '/class.lang.php');
 	require_once(TOOLKIT . '/class.general.php');
 	require_once(CORE . '/class.errorhandler.php');
@@ -209,4 +209,4 @@
 	}
 
 	define('INSTALL_REQUIREMENTS_PASSED', true);
-	include_once('./symphony/lib/toolkit/include.install.php');
+	include_once('./symphony/lib/include.install.php');

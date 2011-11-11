@@ -132,14 +132,14 @@
 
 			// Load default datetime strings
 			if(empty(self::$_datetime_dictionary)) {
-				include(LANG . '/datetime.php');
+				include(LANG . '/include.datetime.php');
 
 				self::$_datetime_dictionary = $datetime_strings;
 			}
 
 			// Load default transliterations
 			if(empty(self::$_transliterations)) {
-				include(LANG . '/transliterations.php');
+				include(LANG . '/include.transliterations.php');
 
 				self::$_transliterations = $transliterations;
 			}

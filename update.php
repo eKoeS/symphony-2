@@ -57,7 +57,7 @@
 	define('DOCROOT', rtrim(dirname(__FILE__), '/'));
 	define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . dirname($_SERVER['PHP_SELF']), '/'));
 
-	require_once(DOCROOT . '/symphony/lib/boot/bundle.php');
+	require_once(DOCROOT . '/symphony/bundle.php');
 	require_once(TOOLKIT . '/class.general.php');
 
 	set_error_handler('__errorHandler');

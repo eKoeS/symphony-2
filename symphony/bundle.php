@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * @package boot
+	 * @package symphony
 	 */
 
 	if(!defined('PHP_VERSION_ID')){
@@ -27,8 +27,8 @@
 
 	ini_set('magic_quotes_runtime', 0);
 
-	require_once(DOCROOT . '/symphony/lib/boot/func.utilities.php');
-	require_once(DOCROOT . '/symphony/lib/boot/defines.php');
+	require_once(DOCROOT . '/symphony/lib/include.utilities.php');
+	require_once(DOCROOT . '/symphony/lib/include.defines.php');
 
 	if (!file_exists(CONFIG)) {
 

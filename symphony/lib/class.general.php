@@ -159,7 +159,7 @@
 				$url = 'http://' . $url;
 			}
 
-			include(TOOLKIT . '/util.validators.php');
+			include(TOOLKIT . '/include.validators.php');
 			if(!preg_match($validators['URI'], $url)){
 				$url = '';
 			}

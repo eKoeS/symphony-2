@@ -584,7 +584,7 @@
 		 */
 		public function buildValidationSelect(XMLElement &$wrapper, $selected = null, $name='fields[validator]', $type='input'){
 
-			include(TOOLKIT . '/util.validators.php');
+			include(TOOLKIT . '/include.validators.php');
 			$rules = ($type == 'upload' ? $upload : $validators);
 
 			$label = Widget::Label(__('Validation Rule'));

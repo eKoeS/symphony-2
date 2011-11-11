@@ -1,7 +1,7 @@
 <?php
 
 	/**
-	 * @package boot
+	 * @package lib
 	 */
 
 	/**
@@ -140,14 +140,14 @@
 	 * the `symphony/lib` folder.
 	 * @var string
 	 */
-	define_safe('BOOT', LIBRARY . '/boot');
+	define_safe('BOOT', LIBRARY);
 
 	/**
 	 * The filesystem path to the `core` folder which is contained within
 	 * the `symphony/lib` folder.
 	 * @var string
 	 */
-	define_safe('CORE', LIBRARY . '/core');
+	define_safe('CORE', LIBRARY);
 
 	/**
 	 * The filesystem path to the `lang` folder which is contained within
@@ -162,7 +162,7 @@
 	 * the `symphony/lib` folder.
 	 * @var string
 	 */
-	define_safe('TOOLKIT', LIBRARY . '/toolkit');
+	define_safe('TOOLKIT', LIBRARY);
 
 	/**
 	 * The filesystem path to the `email-gateways` folder which is contained within
