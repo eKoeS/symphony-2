@@ -309,7 +309,7 @@
 		 *  The name of the database that is to be selected, defaults to null.
 		 * @return boolean
 		 */
-		public function select($db=NULL){
+		public function selectDB($db=NULL){
 			if ($db) MySQL::$_connection['database'] = $db;
 
 			if (!mysql_select_db(MySQL::$_connection['database'], MySQL::$_connection['id'])) {
@@ -494,6 +494,126 @@
 		 */
 		public function getInsertID(){
 			return mysql_insert_id(MySQL::$_connection['id']);
+		}
+
+		public function select($tables, $fields = '*', $where = 1, $sortby = 'id', $sortdirection = 'ASC', $limit = null, $start = null, $joins = null){
+
+			// Tables
+			if(empty($tables)){
+				return array();
+			}
+			elseif(!is_array($tables)){
+				$tables = $this->cleanValue($tables);
+				$tables = sprintf('`%s` AS `t1`', $tables);
+			}
+			else{
+				$tmp = array();
+				$count = 0;
+
+				foreach($tables as $alias => $value){
+					$value = $this->cleanValue($value);
+
+					if(!is_int($alias)){
+						$alias = $this->cleanValue($alias);
+						$tmp[] = "`$value` AS `$alias`";
+					}
+					else{
+						$count++;
+						$tmp[] = "`$value` AS `t$count`";
+					}
+				}
+
+				$tables = implode(', ', $tmp);
+			}
+
+			// Fields
+			if(empty($fields)){
+				$fields = '*';
+			}
+			elseif(!is_array($fields)){
+				$fields = $this->cleanValue($fields);
+				$fields = ($fields == '*') ? $fields : '`' . $fields . '`';
+			}
+			else{
+				$tmp = array();
+
+				foreach($fields as $alias => $value){
+					$value = $this->cleanValue($value);
+
+					preg_match('/^(?:.*)\((.*)\)$/', $value, $matches);
+
+					if(count($matches) > 1){
+						$f = explode('.', $matches[1]);
+					}
+					else{
+						$f = explode('.', $value);
+					}
+
+					if(count($f) > 1){
+						$f = "`{$f[0]}`.`{$f[1]}`";
+					}
+					else{
+						$f = "`{$f[0]}`";
+					}
+
+					if(count($matches) > 1){
+						$f = str_replace($matches[1], $f, $value);
+					}
+
+					if(!is_int($alias)){
+						$alias = $this->cleanValue($alias);
+						$f = "$f AS `$alias`";
+					}
+
+					$tmp[] = $f;
+				}
+
+				$fields = implode(', ', $tmp);
+			}
+
+			// Sort
+			if(empty($sortby)){
+				$sortby = 'id';
+			}
+			if(empty($sortdirection)){
+				$sortdirection = 'ASC';
+			}
+			$sortby = '`' . $this->cleanValue($sortby) . '`';
+			$sortdirection = $this->cleanValue($sortdirection);
+
+			// Limit
+			if(empty($limit)){
+				$limit = '';
+				$start = '';
+			}
+			else{
+				$limit = 'LIMIT ' . $this->cleanValue($limit);
+				$start = ($start) ? ', ' . $this->cleanValue($start) : '';
+			}
+
+			// SQL string
+			$sql = sprintf('
+				SELECT    %s
+				FROM      %s
+				          %s
+				WHERE     %s
+				ORDER BY  %s %s
+				          %s %s
+				',
+				$fields,
+				$tables,
+				$this->cleanValue($joins),
+				$this->cleanValue($where),
+				$sortby, $sortdirection,
+				$limit, $start
+			);
+
+			echo $sql; return;
+
+			$records = $this->fetch($sql);
+
+			if(!is_array($records) || empty($records)) return array();
+
 		}
 
 		/**
