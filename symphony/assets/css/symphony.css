@@ -1,0 +1,486 @@
+/*-----------------------------------------------------------------------------
+	Reset
+-----------------------------------------------------------------------------*/
+
+/* Based on Eric Meyer's reset
+ * http://meyerweb.com/eric/tools/css/reset/
+ * v1.0 | 20080212
+ */
+
+html, body, div, span, applet, object, iframe,
+header, nav, section, aside, footer,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 1em;
+	vertical-align: baseline;
+	background: transparent;
+	text-decoration: none;
+}
+input, select, textarea, button {
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	vertical-align: baseline;
+}
+button::-moz-focus-inner {
+	border:0;
+	padding:0;
+}
+ol, ul {
+	list-style: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+header, nav, section, aside, footer {
+	display: block;
+}
+
+/*-----------------------------------------------------------------------------
+	Global HTML Elements
+-----------------------------------------------------------------------------*/
+
+/* General */
+
+body {
+	/* WTF Leelawadee?! http://www.microsoft.com/typography/fonts/family.aspx?FID=344 */
+	font: 68.75%/1.5 Lucida Grande, Leelawadee, Tahoma, Verdana, sans-serif;
+	background: #fff;
+	color: #222;
+}
+a {
+	color: #3f69a5;
+	text-decoration: underline;
+	cursor: pointer;
+}
+a:hover {
+	color: #000;
+}
+a:active, a:focus {
+	color: #d42;
+}
+h1, h2 {
+	font: 127.28% Lucida Grande, Leelawadee, Tahoma, Verdana, sans-serif;
+}
+p {
+	margin-bottom: 1.5em;
+}
+ul, ol {
+	margin: 0 0 1.5em 2.25em;
+}
+
+/* Code */
+
+code {
+	font: 110%/1.5 Monaco, Consolas, 'Andale Mono', monospace;
+	font-size-adjust: 0.5;
+}
+pre {
+	margin-bottom: 1.75em;
+}
+pre code {
+	display: block;
+	white-space: pre;
+}
+pre, code {
+	color: #474742;
+	white-space: normal;
+}
+i code {
+	font-size: 1em;
+	font-size-adjust: 0;
+}
+
+/* Labels */
+
+fieldset {
+	position: relative;
+	padding: 1em 0;
+}
+legend {
+	line-height: 1;
+	padding: 0;
+	color: rgba(0, 0, 0, 0.65);
+	font-weight: bold;
+}
+label {
+	display: block;
+	margin-bottom: 1.5em;
+	position: relative;
+}
+/* label > i becomes label .help */
+label > .help {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+label input {
+	padding: 2px;
+}
+
+/* Inputs */
+
+textarea,
+label input {
+	margin-top: 2px;
+	width: 100%;
+	font-size: 109.09%;
+	font-family: inherit;
+	box-sizing: border-box;
+	-khtml-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+label input[type=checkbox] {
+	position: relative;
+	top: 2px;
+}
+input[size],
+input[type=radio],
+input[type=checkbox] {
+	display: inline;
+	margin: 0 0.25em 0 0;
+	width: auto;
+}
+input[size],
+label + select {
+	margin-left: 0.25em;
+}
+select {
+	width: 100%;
+	display: block;
+	margin-top: 2px;
+	box-sizing: border-box;
+	-khtml-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+select[multiple] {
+	width: 100%;
+	height: 10em;
+}
+button {
+	padding: 3.5px 6px 4px;
+}
+button,
+input[type=submit] {
+	font-family: Lucida Grande, Leelawadee, Tahoma, Verdana, sans-serif;
+}
+
+/*--------------------------------------------------------------------------
+	Globals - Classes
+--------------------------------------------------------------------------*/
+
+.code {
+	font: 134%/1.3 monospace;
+}
+/*.busy,*/
+/*.busy * {*/
+/*	cursor: wait;*/
+/*}*/
+.inactive,
+.inactive * {
+	color: #b4b4b4;
+}
+.irrelevant {
+	display: none !important;
+}
+/*.selected, .selected a, .selected .inactive {*/
+/*	color: #fff;*/
+/*}*/
+/*.selected a:hover {*/
+/*	color: #f2f2f2;*/
+/*}*/
+.help {
+	color: #808080;
+}
+p.label {
+	margin: 0 0 2px;
+}
+/*span.frame {*/
+/*	display: block;*/
+/*	margin-bottom: 1.5em;*/
+/*	border: 1px solid #d3d3d2;*/
+/*	padding: 12px;*/
+/*	background-color: #f5f5f3;*/
+/*	text-align: center;*/
+/*	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);*/
+/*	border-radius: 4px;*/
+/*}*/
+/*span.frame code {*/
+/*	color: #919183;*/
+/*}*/
+/*span.frame button,*/
+/*span.frame .button {*/
+/*	float: none;*/
+/*}*/
+
+/*-----------------------------------------------------------------------------
+	Globals - Errors
+-----------------------------------------------------------------------------*/
+
+.invalid {
+	color: #fff;
+	margin-bottom: 1.5em;
+	text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+}
+.invalid label {
+	margin-bottom: 0;
+	padding: 0.75em 1em 0.75em 0.75em;
+	background-color: #EB6347;
+	border: 1px solid #c31;
+	border-bottom-width: 0;
+}
+body .invalid label > i {
+	top: 0.75em; right: 1em;
+	background-color: #d42;
+	color: #EAC9C2;
+}
+.invalid label > i:hover {
+	background-color: rgba(221, 68, 34, 0.8) !important;
+}
+.invalid > .group > label {
+	float: right;
+	margin-left: -0.1em;
+	padding: 0.75em 1.1em 0.75em 0.75em;
+	border-left-width: 0;
+}
+.invalid > .group > label:first-child {
+	float: left;
+	margin-left: -2.94em;
+	margin-right: 0;
+	padding: 0.75em 0 0.75em 1em;
+	border-left-width: 1px;
+	border-right-width: 0;
+	border-left-color: #c31;
+}
+.invalid > label {
+	padding: 0.75em 1em 0.75em;
+	background-color: #EB6347;
+	border: 1px solid #c31;
+	border-bottom-width: 0;
+}
+.invalid > p {
+	clear: left;
+	margin: 0;
+	padding: 0 1em 0.75em;
+	background-color: #EB6347;
+	border: 1px solid #c31;
+	border-top-width: 0;
+	border-bottom-color: #b21;
+}
+.invalid p.help {
+	color: #FFF;
+}
+.invalid a {
+	color: #fb9;
+	text-decoration: underline;
+}
+.invalid a:hover {
+	color: #721;
+}
+
+/*-----------------------------------------------------------------------------
+	Components - Buttons
+-----------------------------------------------------------------------------*/
+
+input[type=submit],
+button,
+.button {
+	position: relative;
+	float: right;
+	margin: 0 0 0 10px;
+	font-family: Lucida Grande, Leelawadee, Tahoma, Verdana, sans-serif;
+	font-size: 11px;
+	text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.7);
+	line-height: 1.3;
+	color: #63665b;
+	padding: 4px 14px;
+	text-decoration: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid #bfbfb7;
+	background: -moz-linear-gradient(
+		bottom,
+		#d7d7d2,
+		#efefed
+	);
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0, #d7d7d2),
+	    color-stop(1, #efefed)
+	);
+}
+input[type=submit]:hover,
+input[type=submit]:active,
+input[type=submit]:focus,
+button:hover,
+button:active,
+button:focus,
+.button:hover,
+.button:active,
+.button:focus {
+	color: #56594f;
+	border: 1px solid #a7a79c;
+	background: -moz-linear-gradient(
+		bottom,
+		#cbcbc5,
+		#efefed
+	);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #cbcbc5),
+		color-stop(1, #efefed)
+	);
+}
+button.create,
+.button.create,
+.single .actions input[type=submit] {
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	color: #fff;
+	background: -moz-linear-gradient(
+		bottom,
+		#78ad2f,
+		#9cd154
+	);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #78ad2f),
+		color-stop(1, #9cd154)
+	);
+	border: 1px solid #75a632;
+	color: #fff;
+}
+button.create:hover,
+button.create:active,
+button.create:focus,
+.button.create:hover,
+.button.create:active,
+.button.create:focus,
+.single .actions input[type=submit]:hover,
+.single .actions input[type=submit]:active,
+.single .actions input[type=submit]:focus {
+	border-color: #5c8326;
+	background: -moz-linear-gradient(
+		bottom,
+		#6e9f2a,
+		#9cd154
+	);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #6e9f2a),
+		color-stop(1, #9cd154)
+	);
+}
+button.delete {
+	margin-left: 0;
+}
+button.delete:hover,
+button.delete:active,
+button.delete:focus,
+.button.delete:hover,
+.button.delete:active,
+.button.delete:focus {
+	border-color: #d33523;
+	color: #fff;
+	background: -moz-linear-gradient(
+		bottom,
+		#bf222f,
+		#dd4433
+	);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, #bf222f),
+		color-stop(1, #dd4433)
+	);
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+a.button:active,
+button:active,
+button.create:active,
+.button.create:active,
+button.delete:active,
+.button.delete:active,
+input[type=submit]:active,
+.single .actions input[type=submit]:active {
+	 -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 0 4px rgba(0,0,0, 0.2), inset -1px -2px 3px rgba(255,255,255, 0.25);
+}
+
+/*--------------------------------------------------------------------------
+	Components - Grids
+--------------------------------------------------------------------------*/
+
+/* In Symphony 2.4:
+ * .group => .grid
+ * .triple => .three */
+
+.group {
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+.group:after {
+	content: "";
+	display: block;
+	clear: left;
+	height: 0;
+}
+
+.column {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	float: left;
+}
+
+.two .column {
+	width: 50%;
+}
+.two .column.primary {
+	width: 75%;
+}
+.two .column.secondary {
+	width: 25%;
+}
+
+.three .column {
+	width: 33.4%;
+}
+.three .column:nth-child(2) {
+	width: 33.2%;
+}
+
+.four .column {
+	width: 25;
+}
+
