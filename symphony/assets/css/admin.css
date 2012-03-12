@@ -146,7 +146,6 @@ tr.selected td {
 	background-image:   linear-gradient(to bottom, #668abe, #5c83ba);
 	border-bottom: 1px solid #7492bc;
 	border-top: 1px solid #4D78B4;
-	text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
 }
 tr.selected td,
 tr.selected a,
@@ -156,7 +155,6 @@ tr.selecting a {
 }
 tr.selected .inactive {
 	color: rgba(255, 255, 255, 0.6);
-	text-shadow: 0 1px 1px rgb(63, 105, 165);
 }
 
 /* Orderable */
@@ -482,7 +480,9 @@ div.notifier nav:hover:before {
 	border-bottom: 1px solid #7c7c7c;
 	margin: 0 3px;
 }
-.notice a:hover {
+.notice a:hover,
+.notice a:active,
+.notice a:focus {
 	color: #e4ece4;
 	border-color: #9b9b9b;
 	text-decoration: none;
@@ -545,8 +545,13 @@ div.notifier nav:hover:before {
 	color: rgba(255, 255, 255, 0.85);
 	text-decoration: none;
 }
-#header h1 a:hover, #session a:hover {
+#header h1 a:hover, #header h1 a:focus,
+#session a:hover, #session a:focus {
 	color: rgba(255, 255, 255, 0.99);
+}
+#header h1 a:active, #header h1 a:focus,
+#session a:active, #session a:focus {
+	border-bottom: 1px solid white;
 }
 #session {
 	margin: -30px 0 0;
@@ -728,7 +733,7 @@ div.notifier nav:hover:before {
 	text-decoration: none;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-#breadcrumbs a:hover {
+#breadcrumbs a:hover, #breadcrumbs a:focus {
 	border-bottom-color: #a9a9a9;
 	color: rgba(0, 0, 0, 0.8);
 }
@@ -867,6 +872,10 @@ ul.page input {
 	line-height: 1;
 	color: #666;
 	border-radius: 4px;
+	padding: 0;
+	box-shadow: none;
+	font-size: 1em;
+	margin: 0;
 }
 ul.page form:hover input {
 	color: #9e9e9e;

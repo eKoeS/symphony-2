@@ -30,10 +30,10 @@
 			$this->setTitle($this->_page_title);
 			$this->addElementToHead(new XMLElement('meta', NULL, array('charset' => 'UTF-8')), 1);
 
-			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/symphony.basic.css', 'screen', 40);
-			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/symphony.buttons.css', 'screen', 41);
-			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/symphony.frames.css', 'screen', 42);
-			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/symphony.grids.css', 'screen', 42);
+			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/css/symphony.basic.css', 'screen', 40);
+			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/css/symphony.buttons.css', 'screen', 41);
+			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/css/symphony.frames.css', 'screen', 42);
+			$this->addStylesheetToHead(SYMPHONY_URL . '/assets/css/symphony.grids.css', 'screen', 42);
 			$this->addStylesheetToHead(INSTALL_URL . '/assets/main.css', 'screen', 49);
 
 			return parent::generate();
@@ -97,20 +97,14 @@
 
 		protected function viewRequirements() {
 			$h2 = new XMLElement('h2', __('Outstanding Requirements'));
-			$p = new XMLElement('p', __('Symphony needs the following requirements satisfied before installation can proceed.'));
 
 			$this->Form->appendChild($h2);
-			$this->Form->appendChild($p);
 
 			if(!empty($this->_params['errors'])){
-				$dl = new XMLElement('dl');
+				$div = new XMLElement('div');
+				$this->__appendError(array_keys($this->_params['errors']), $div, __('Symphony needs the following requirements satisfied before installation can proceed.'));
 
-				foreach($this->_params['errors'] as $err){
-					$dl->appendChild(new XMLElement('dt', $err['msg']));
-					$dl->appendChild(new XMLElement('dd', $err['details']));
-				}
-
-				$this->Form->appendChild($dl);
+				$this->Form->appendChild($div);
 			}
 		}
 
@@ -153,13 +147,12 @@
 
 			$div = new XMLElement('div');
 			$div->appendChild(
-				new XMLElement('h2', __('All done!'))
+				new XMLElement('h2', __('The floor is yours'))
 			);
 			$div->appendChild(
-				new XMLElement('p', __('Symphony has now been installed and it\'s only a click away. Excited?'))
+				new XMLElement('p', __('Thanks for taking the quick but epic installation journey with us. It\'s now your turn to shine!'))
 			);
 			$this->Form->appendChild($div);
-
 
 			$extensions = ' ';
 			foreach($this->_params['disabled-extensions'] as $handle){
@@ -214,11 +207,12 @@
 		 */
 			$div = new XMLElement('div');
 			$div->appendChild(
-				new XMLElement('h2', __('Hey! This is a cool message written by Allen Chang introducing you to the  Symphony ninja style.'))
+				new XMLElement('h2', __('Find something sturdy to hold on to because things are about to get awesome.'))
 			);
 			$div->appendChild(
-				new XMLElement('p', __('Still seeing this message? Well, Allen seems not to have finished his text yet. Sorry!'))
+				new XMLElement('p', __('Think of this as a pre-game warm up. You know you\'re going to kick-ass, so you\'re savouring every moment before the show. Welcome to the Symphony install page.'))
 			);
+
 			$this->Form->appendChild($div);
 
 		/* -----------------------------------------------
@@ -229,8 +223,10 @@
 			$fieldset = new XMLElement('fieldset');
 			$div = new XMLElement('div');
 			$this->__appendError(array('no-write-permission-root', 'no-write-permission-workspace'), $div);
-			$fieldset->appendChild($div);
-			$this->Form->appendChild($fieldset);
+			if($div->getNumberOfChildren() > 0) {
+				$fieldset->appendChild($div);
+				$this->Form->appendChild($fieldset);
+			}
 
 		/* -----------------------------------------------
 		 * Website & Locale settings
@@ -288,7 +284,7 @@
 			$Div->appendChild(Widget::label(__('Username'), Widget::Input('fields[database][user]', $fields['database']['user']), 'column'));
 			$Div->appendChild(Widget::label(__('Password'), Widget::Input('fields[database][password]', $fields['database']['password'], 'password'), 'column'));
 
-			$this->__appendError(array('no-database-connection'), $Div);
+			$this->__appendError(array('database-invalid-credentials'), $Div);
 			$Database->appendChild($Div);
 
 			// Advanced configuration
@@ -393,21 +389,21 @@
 		 */
 
 			$this->Form->appendChild(new XMLElement('h2', __('Install Symphony')));
-			$this->Form->appendChild(new XMLElement('p', __('Make sure that you delete the %s folder after Symphony has installed successfully.', array('<code>' . basename(INSTALL_URL) . '</code>'))));
+			$this->Form->appendChild(new XMLElement('p', __('The installation process goes by really quickly. Make sure to take a deep breath before you press that sweet button.', array('<code>' . basename(INSTALL_URL) . '</code>'))));
 
 			$Submit = new XMLElement('div', null, array('class' => 'submit'));
 			$Submit->appendChild(Widget::Input('lang', Lang::get(), 'hidden'));
 
-			$button = Widget::Input('action[install]', __('Install Symphony'), 'submit');
-			if(!empty($this->_params['errors'])) {
-				$button->setAttribute('disabled', 'disabled');
-			}
-			$Submit->appendChild($button);
+			$Submit->appendChild(Widget::Input('action[install]', __('Install Symphony'), 'submit'));
 
 			$this->Form->appendChild($Submit);
 		}
 
-		private function __appendError(array $codes, XMLElement &$element){
+		private function __appendError(array $codes, XMLElement &$element, $message = null){
+			if(is_null($message)) {
+				$message =  __('The following errors have been reported:');
+			}
+
 			foreach($codes as $i => $c){
 				if(!isset($this->_params['errors'][$c])) unset($codes[$i]);
 			}
@@ -422,7 +418,7 @@
 						}
 					}
 
-					$element = Widget::Error($element, __('The following errors have been reported:'));
+					$element = Widget::Error($element, $message);
 					$element->appendChild($ul);
 				}
 				else{

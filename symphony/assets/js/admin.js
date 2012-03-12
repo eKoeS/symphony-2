@@ -107,7 +107,11 @@
 		--------------------------------------------------------------------------*/
 
 		// Duplicators
-		$('.filters-duplicator').symphonyDuplicator();
+		$('.filters-duplicator')
+			.symphonyDuplicator()
+			.on('constructshow.duplicator', function() {
+				$('.tags').symphonyTags();
+			});
 
 		// Field editor
 		$('#fields-duplicator')
@@ -169,14 +173,10 @@
 				select = applicable.find('select'),
 				button = applicable.find('button');
 
-			// Set width
-			if(!applicable.is('.single')) {
-				applicable.width(select.outerWidth() + button.outerWidth() + 10);
-			}
-
 			// Set menu status
 			if(selection.length > 0) {
 				selection.on('select deselect check', 'tbody tr:has(input)', function(event) {
+				
 					// Activate menu
 					if(selection.has('.selected').length > 0) {
 						applicable.removeClass('inactive');
@@ -484,14 +484,13 @@
 			});
 		});
 
-		// Set data source manager context
-		$('#ds-context').change();
-
-		// Trigger the parameter name being remembered when the Datasource
-		// context changes
-		$('#ds-context').on('change', function() {
-			$('#blueprints-datasources input[name="fields[name]"]').trigger('change');
-		});
+		$('#ds-context')
+			// Trigger the parameter name being remembered when the Datasource context changes
+			.on('change', function() {
+				$('#blueprints-datasources input[name="fields[name]"]').trigger('change');
+			})
+			// Set data source manager context
+			.change();
 
 		// Once pagination is disabled, max_records and page_number are disabled too
 		var max_record = $('input[name*=max_records]'),
