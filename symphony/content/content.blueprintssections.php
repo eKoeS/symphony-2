@@ -110,13 +110,12 @@
 
 			$formHasErrors = (is_array($this->_errors) && !empty($this->_errors));
 
-			if($formHasErrors)
+			if($formHasErrors) {
 				$this->pageAlert(
-					__('An error occurred while processing this form.')
-					. ' <a href="#error">'
-					. __('See below for details.')
-					. '</a>'
-					, Alert::ERROR);
+					__('An error occurred while processing this form. See below for details.')
+					, Alert::ERROR
+				);
+			}
 
 			$showEmptyTemplate = (is_array($fields) && !empty($fields) ? false : true);
 
@@ -151,7 +150,7 @@
 
 			$navgroupdiv = new XMLElement('div', NULL, array('class' => 'column'));
 			$sections = SectionManager::fetch(NULL, 'ASC', 'sortorder');
-			$label = Widget::Label(__('Navigation Group') . ' <i>' . __('Created if does not exist') . '</i>');
+			$label = Widget::Label(__('Navigation Group'));
 			$label->appendChild(Widget::Input('meta[navigation_group]', $meta['navigation_group']));
 
 			if(isset($this->_errors['navigation_group'])) $navgroupdiv->appendChild(Widget::Error($label, $this->_errors['navigation_group']));
@@ -277,11 +276,9 @@
 			$formHasErrors = (is_array($this->_errors) && !empty($this->_errors));
 			if($formHasErrors) {
 				$this->pageAlert(
-					__('An error occurred while processing this form.')
-					. ' <a href="#error">'
-					. __('See below for details.')
-					. '</a>'
-					, Alert::ERROR);
+					__('An error occurred while processing this form. See below for details.')
+					, Alert::ERROR
+				);
 			}
 			// These alerts are only valid if the form doesn't have errors
 			else if(isset($this->_context[2])) {
@@ -367,7 +364,7 @@
 
 			$navgroupdiv = new XMLElement('div', NULL, array('class' => 'column'));
 			$sections = SectionManager::fetch(NULL, 'ASC', 'sortorder');
-			$label = Widget::Label(__('Navigation Group') . ' <i>' . __('Choose only one. Created if does not exist') . '</i>');
+			$label = Widget::Label(__('Navigation Group'));
 			$label->appendChild(Widget::Input('meta[navigation_group]', $meta['navigation_group']));
 
 			if(isset($this->_errors['navigation_group'])) $navgroupdiv->appendChild(Widget::Error($label, $this->_errors['navigation_group']));
