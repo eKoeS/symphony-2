@@ -1,6 +1,16 @@
 <?php
 
-	Class StaticDatasource extends Datasource{
+	/**
+	 * @package data-sources
+	 */
+	/**
+	 * The `StaticXMLDatasource` allows a block of XML to be exposed to the
+	 * Frontend. It is a limited to providing the XML as is, and does not
+	 * support output parameters or any filtering.
+	 *
+	 * @since Symphony 2.3
+	 */
+	Class StaticXMLDatasource extends Datasource {
 
 		public function execute(&$param_pool) {
 			include_once(TOOLKIT . '/class.xsltprocess.php');
@@ -26,4 +36,5 @@
 
 			return $result;
 		}
+
 	}

@@ -31,7 +31,7 @@
 		};
 
 		/*--------------------------------------------------------------------------
-			Plugins - Tags, Pickable and Selectable
+			Plugins - Tags, Pickable, Selectable, Notify and Drawers
 		--------------------------------------------------------------------------*/
 
 		// Tags
@@ -46,6 +46,12 @@
 
 		// Selectable
 		$('table.selectable').symphonySelectable();
+
+		// Notify
+		$('#header').symphonyNotify();
+
+		// Drawers
+		$('div.drawer').symphonyDrawer();
 
 		/*--------------------------------------------------------------------------
 			Plugins - Orderable
@@ -107,11 +113,7 @@
 		--------------------------------------------------------------------------*/
 
 		// Duplicators
-		$('.filters-duplicator')
-			.symphonyDuplicator()
-			.on('constructshow.duplicator', function() {
-				$('.tags').symphonyTags();
-			});
+		$('.filters-duplicator').symphonyDuplicator();
 
 		// Field editor
 		$('#fields-duplicator')
@@ -119,9 +121,6 @@
 				orderable: true,
 				collapsible: true,
 				preselect: 'input'
-			})
-			.on('constructshow.duplicator', function() {
-				$('.tags').symphonyTags();
 			})
 			.on('keyup', '.instance input[name*="[label]"]', function(event) {
 				var label = $(this),
@@ -158,12 +157,6 @@
 			});
 
 		/*--------------------------------------------------------------------------
-			Plugins - System Messages
-		--------------------------------------------------------------------------*/
-
-		$('#header').symphonyNotify();
-
-		/*--------------------------------------------------------------------------
 			Components - With Selected
 		--------------------------------------------------------------------------*/
 
@@ -176,7 +169,7 @@
 			// Set menu status
 			if(selection.length > 0) {
 				selection.on('select deselect check', 'tbody tr:has(input)', function(event) {
-				
+
 					// Activate menu
 					if(selection.has('.selected').length > 0) {
 						applicable.removeClass('inactive');
@@ -365,7 +358,7 @@
 		// Change user password
 		$('#password').each(function() {
 			var password = $(this),
-				overlay = $('<div class="password"><span class="frame"><button>' + Symphony.Language.get('Change Password') + '</button></span></div>');
+				overlay = $('<div class="password"><span class="frame"><button type="button">' + Symphony.Language.get('Change Password') + '</button></span></div>');
 
 			// Add overlay
 			if(password.has('.invalid').length == 0 && Symphony.Context.get('env')[0] != 'new') {

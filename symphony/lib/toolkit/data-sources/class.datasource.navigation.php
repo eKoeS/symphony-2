@@ -1,17 +1,24 @@
 <?php
 
+	/**
+	 * @package data-sources
+	 */
+	/**
+	 * The `NavigationDatasource` outputs the Symphony page structure as XML.
+	 * This datasource supports filtering to narrow down the results to only
+	 * show pages that match a particular page type, have a specific parent, etc.
+	 *
+	 * @since Symphony 2.3
+	 */
 	Class NavigationDatasource extends Datasource{
 
-	
 		public function __processNavigationParentFilter($parent){
-
 			$parent_paths = preg_split('/,\s*/', $parent, -1, PREG_SPLIT_NO_EMPTY);
 			$parent_paths = array_map(create_function('$a', 'return trim($a, " /");'), $parent_paths);
 
 			return (is_array($parent_paths) && !empty($parent_paths) ? " AND p.`path` IN ('".implode("', '", $parent_paths)."')" : null);
 		}
 
-	
 		public function __processNavigationTypeFilter($filter, $filter_type = DS_FILTER_OR) {
 			$types = preg_split('/'.($filter_type == DS_FILTER_AND ? '\+' : '(?<!\\\\),').'\s*/', $filter, -1, PREG_SPLIT_NO_EMPTY);
 			$types = array_map('trim', $types);
@@ -29,7 +36,6 @@
 
 			return $type_sql;
 		}
-
 
 		public function __buildPageXML($page, $page_types) {
 			$oPage = new XMLElement('page');
@@ -54,10 +60,7 @@
 			return $oPage;
 		}
 
-// BEGIN XML GENERATION CODE
-
 		public function execute(&$param_pool) {
-
 			$result = new XMLElement($this->dsParamROOTELEMENT);
 			$type_sql = $parent_sql = null;
 

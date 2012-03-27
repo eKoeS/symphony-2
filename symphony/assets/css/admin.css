@@ -32,8 +32,8 @@
 
 #header h1 a, #session a {
 	border: none;
+	color: #e6e6e6;
 	color: rgba(255, 255, 255, 0.85);
-	text-decoration: none;
 }
 
 #header h1 a:hover, #header h1 a:focus,
@@ -41,8 +41,8 @@
 	color: rgba(255, 255, 255, 0.99);
 }
 
-#header h1 a:active, #header h1 a:focus,
-#session a:active, #session a:focus {
+#header h1 a:focus,
+#session a:focus {
 	border-bottom: 1px solid white;
 }
 
@@ -164,7 +164,6 @@
 	display: block;
 	font-weight: normal;
 	padding: 0 9px;
-	text-decoration: none;
 	border: 1px solid transparent;
 	cursor: pointer;
 }
@@ -227,8 +226,12 @@
 	float: left;
 }
 
-#breadcrumbs {
-	float: left;
+#breadcrumbs:after {
+	content: ' ';
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	clear: both;
 }
 
 #breadcrumbs a, #breadcrumbs span {
@@ -240,7 +243,6 @@
 }
 
 #breadcrumbs a {
-	text-decoration: none;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -465,7 +467,7 @@ ul.page li {
 ul.page a {
 	margin: 0 -0.67em;
 	padding: 0.67em;
-	text-decoration: none;
+	border-bottom: none;
 }
 
 ul.page form {
@@ -572,19 +574,20 @@ div.field-checkbox:first-child {
 	float: left;
 	max-width: 50%;
 	overflow: hidden;
-	text-overflow :ellipsis;
+	text-overflow: ellipsis;
 }
 
 .file em {
 	float: right;
 	color: #998;
-	text-decoration: underline;
+	border-bottom: 1px solid rgba(153, 153, 136, 0.3);
 	font-style: normal;
 	cursor: pointer;
 }
 
 .file em:hover {
-	color: #d43;
+	color: #d42;
+	border-bottom-color: rgba(221, 68, 34, 0.3);
 }
 
 /* Actions */

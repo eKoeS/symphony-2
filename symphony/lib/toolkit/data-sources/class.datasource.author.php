@@ -1,8 +1,17 @@
 <?php
 
+	/**
+	 * @package data-sources
+	 */
+	/**
+	 * The `AuthorDatasource` extends the base `Datasource` class and allows
+	 * the retrieval of Author information from the current Symphony installation.
+	 *
+	 * @since Symphony 2.3
+	 */
 	Class AuthorDatasource extends Datasource{
 
-		public function __processAuthorFilter($field, $filter, $database){ //, $filtertype=DS_FILTER_OR){
+		public function __processAuthorFilter($field, $filter){ //, $filtertype=DS_FILTER_OR){
 
 			//$bits = preg_split('/'.($filtertype == DS_FILTER_AND ? '\+' : ',').'\s*/', $filter);
 
@@ -36,7 +45,7 @@
 
 			//}
 
-			$authors = $database->fetchCol('id', $sql);
+			$authors = Symphony::Database()->fetchCol('id', $sql);
 
 			return (is_array($authors) && !empty($authors) ? $authors : NULL);
 
@@ -51,7 +60,7 @@
 
 					if(!is_array($value) && trim($value) == '') continue;
 
-					$ret = $this->__processAuthorFilter($field, $value, Symphony::Database());
+					$ret = $this->__processAuthorFilter($field, $value);
 
 					if(empty($ret)){
 						$author_ids = array();
@@ -150,7 +159,7 @@
 					}
 				}
 			}
-			
+
 			return $result;
 		}
 	}
