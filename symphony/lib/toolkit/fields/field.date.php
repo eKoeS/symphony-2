@@ -307,7 +307,7 @@
 			$label->setAttribute('class', 'column');
 			$input = Widget::Input('fields['.$this->get('sortorder').'][pre_populate]', 'yes', 'checkbox');
 			if($this->get('pre_populate') == 'yes') $input->setAttribute('checked', 'checked');
-			$label->setValue(__('%s Pre-populate this field with today’s date', array($input->generate())));
+			$label->setValue(__('%s Pre-populate with current date', array($input->generate())));
 			$div->appendChild($label);
 
 			$this->appendShowColumnCheckbox($div);
@@ -323,11 +323,9 @@
 
 			$fields = array();
 
-			$fields['field_id'] = $id;
 			$fields['pre_populate'] = ($this->get('pre_populate') ? $this->get('pre_populate') : 'no');
 
-			Symphony::Database()->query("DELETE FROM `tbl_fields_" . $this->handle() . "` WHERE `field_id` = '$id' LIMIT 1");
-			Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
+			return FieldManager::saveSettings($id, $fields);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -339,7 +337,7 @@
 			$value = null;
 
 			// New entry
-			if(is_null($data) && is_null($error) && $this->get('pre_populate') == 'yes') {
+			if(is_null($data) && is_null($flagWithError) && $this->get('pre_populate') == 'yes') {
 				$value = DateTimeObj::format('now', DateTimeObj::getSetting('datetime_format'));
 			}
 
@@ -358,7 +356,7 @@
 			$label->setAttribute('class', 'date');
 
 			if(!is_null($flagWithError)) {
-				$label = Widget::Error($label, $error);
+				$label = Widget::Error($label, $flagWithError);
 			}
 
 			$wrapper->appendChild($label);

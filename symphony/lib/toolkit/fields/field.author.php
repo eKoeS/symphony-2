@@ -112,7 +112,6 @@
 			parent::displaySettingsPanel($wrapper, $errors);
 
 			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
-
 			// Allow multiple selection
 			$label = Widget::Label();
 			$label->setAttribute('class', 'column');
@@ -129,6 +128,7 @@
 			$label->setValue(__('%s Select current user by default', array($input->generate())));
 			$div->appendChild($label);
 
+			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
 			$this->appendRequiredCheckbox($div);
 			$this->appendShowColumnCheckbox($div);
 			$wrapper->appendChild($div);
@@ -143,12 +143,10 @@
 
 			$fields = array();
 
-			$fields['field_id'] = $id;
 			$fields['allow_multiple_selection'] = ($this->get('allow_multiple_selection') ? $this->get('allow_multiple_selection') : 'no');
 			$fields['default_to_current_user'] = ($this->get('default_to_current_user') ? $this->get('default_to_current_user') : 'no');
 
-			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
-			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
+			return FieldManager::saveSettings($id, $fields);
 		}
 
 	/*-------------------------------------------------------------------------

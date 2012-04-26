@@ -172,10 +172,11 @@
 		public function displaySettingsPanel(XMLElement &$wrapper, $errors = null) {
 			parent::displaySettingsPanel($wrapper, $errors);
 
-			$div = new XMLElement('div', NULL, array('class' => 'group'));
+			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
 
 			// Predefined Values
 			$label = Widget::Label(__('Predefined Values'));
+			$label->setAttribute('class', 'column');
 			$label->appendChild(new XMLElement('i', __('Optional')));
 			$input = Widget::Input('fields['.$this->get('sortorder').'][static_options]', General::sanitize($this->get('static_options')));
 			$label->appendChild($input);
@@ -183,6 +184,7 @@
 
 			// Dynamic Values
 			$label = Widget::Label(__('Dynamic Values'));
+			$label->setAttribute('class', 'column');
 			$label->appendChild(new XMLElement('i', __('Optional')));
 
 			$sections = SectionManager::fetch(NULL, 'ASC', 'name');
@@ -233,6 +235,7 @@
 			$label->setValue(__('%s Sort all options alphabetically', array($input->generate())));
 			$div->appendChild($label);
 
+			$div = new XMLElement('div', NULL, array('class' => 'two columns'));
 			$this->appendShowColumnCheckbox($div);
 			$this->appendRequiredCheckbox($div);
 			$wrapper->appendChild($div);
@@ -256,16 +259,13 @@
 
 			$fields = array();
 
-			$fields['field_id'] = $id;
 			if($this->get('static_options') != '') $fields['static_options'] = $this->get('static_options');
 			if($this->get('dynamic_options') != '') $fields['dynamic_options'] = $this->get('dynamic_options');
 			$fields['allow_multiple_selection'] = ($this->get('allow_multiple_selection') ? $this->get('allow_multiple_selection') : 'no');
 			$fields['sort_options'] = $this->get('sort_options') == 'yes' ? 'yes' : 'no';
 			$fields['show_association'] = $this->get('show_association') == 'yes' ? 'yes' : 'no';
 
-			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");
-
-			if(!Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle())) return false;
+			if(!FieldManager::saveSettings($id, $fields)) { return false; }
 
 			$this->removeSectionAssociation($id);
 
@@ -450,16 +450,17 @@
 
 			foreach($records as $r){
 				$data = $r->getData($this->get('id'));
-
 				$value = General::sanitize($data['value']);
-				$handle = Lang::createHandle($value);
 
-				if(!isset($groups[$this->get('element_name')][$handle])){
-					$groups[$this->get('element_name')][$handle] = array('attr' => array('handle' => $handle, 'value' => $value),
-																		 'records' => array(), 'groups' => array());
+				if(!isset($groups[$this->get('element_name')][$data['handle']])){
+					$groups[$this->get('element_name')][$data['handle']] = array(
+						'attr' => array('handle' => $data['handle'], 'value' => $value),
+						'records' => array(),
+						'groups' => array()
+					);
 				}
 
-				$groups[$this->get('element_name')][$handle]['records'][] = $r;
+				$groups[$this->get('element_name')][$data['handle']]['records'][] = $r;
 			}
 
 			return $groups;

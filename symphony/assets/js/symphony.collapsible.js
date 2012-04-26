@@ -5,7 +5,7 @@
 (function($) {
 
 	/**
-	 * This plugin makes items collapsible.
+	 * Create collapsible elements.
 	 *
 	 * @name $.symphonyCollapsible
 	 * @class
@@ -17,7 +17,7 @@
 	 * @param {String} [options.save_state=true] Stores states of instances using local storage
 	 * @param {String} [options.storage='symphony.collapsible.id.env'] Namespace used for local storage
 	 *
-	 *	@example
+	 * @example
 
 			var collapsible = $('#duplicator').symphonyCollapsible({
 				items:		'.instance',
@@ -31,6 +31,7 @@
 				items:				'.instance',
 				handles:			'.header:first',
 				content:			'.content',
+				ignore:				'.ignore',
 				save_state:			true,
 				storage: 			'symphony.collapsible.' + $('body').attr('id') + (Symphony.Context.get('env') ? '.' + Symphony.Context.get('env')[1] : '')
 			};
@@ -43,7 +44,9 @@
 			var object = $(this),
 				storage = settings.storage + '.' + index + '.collapsed';
 
-		/*-------------------------------------------------------------------*/
+		/*---------------------------------------------------------------------
+			Events
+		---------------------------------------------------------------------*/
 
 			// Collapse item
 			object.on('collapse.collapsible', settings.items, function collapse(event, speed) {
@@ -89,14 +92,17 @@
 				var handle = $(this),
 					item = handle.parents(settings.items);
 
-				// Expand
-				if(item.is('.collapsed')) {
-					item.trigger('expand.collapsible');
-				}
+				if(!handle.is(settings.ignore) && !$(event.target).is(settings.ignore)) {
 
-				// Collapse
-				else {
-					item.trigger('collapse.collapsible');
+					// Expand
+					if(item.is('.collapsed')) {
+						item.trigger('expand.collapsible');
+					}
+
+					// Collapse
+					else {
+						item.trigger('collapse.collapsible');
+					}
 				}
 			});
 
@@ -106,14 +112,17 @@
 					item = handle.parents(settings.items),
 					items = object.find(settings.items);
 
-				// Expand all
-				if(item.is('.collapsed')) {
-					items.trigger('expand.collapsible');
-				}
+				if(!handle.is(settings.ignore) && !$(event.target).is(settings.ignore)) {
 
-				// Collaps all
-				else {
-					items.trigger('collapse.collapsible');
+					// Expand all
+					if(item.is('.collapsed')) {
+						items.trigger('expand.collapsible');
+					}
+
+					// Collaps all
+					else {
+						items.trigger('collapse.collapsible');
+					}
 				}
 			});
 
@@ -146,7 +155,9 @@
 				object.find(settings.items).trigger('store.collapsible');
 			});
 
-		/*-------------------------------------------------------------------*/
+		/*---------------------------------------------------------------------
+			Initialisation
+		---------------------------------------------------------------------*/
 
 			// Prepare interface
 			object.addClass('collapsible');
