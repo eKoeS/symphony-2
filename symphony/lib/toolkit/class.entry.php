@@ -28,6 +28,7 @@
 		/**
 		 * An ISO 8601 representation of when this Entry was created
 		 * eg. `2004-02-12T15:19:21+00:00`
+		 * @deprecated Since Symphony 2.3.1, use $entry->get('creation_date') instead
 		 * @var string
 		 */
 		public $creationDate = null;
@@ -75,8 +76,8 @@
 		 */
 		public function assignEntryId() {
 			$fields = $this->get();
-			$fields['creation_date'] = DateTimeObj::get('Y-m-d H:i:s');
-			$fields['creation_date_gmt'] = DateTimeObj::getGMT('Y-m-d H:i:s');
+			$fields['creation_date'] = $fields['modification_date'] = DateTimeObj::get('c');
+			$fields['creation_date_gmt'] = $fields['modification_date_gmt'] = DateTimeObj::getGMT('c');
 			$fields['author_id'] = is_null($this->get('author_id')) ? '1' : $this->get('author_id'); // Author_id cannot be null
 
 			Symphony::Database()->insert($fields, 'tbl_entries');
@@ -179,7 +180,8 @@
 		 *  the result will always be an array.
 		 * @return array|object
 		 *  Depending on the value of `$asObject`, return the field's data
-		 *  as either an array or an object
+		 *  as either an array or an object. If no data exists, null will be
+		 *  returned.
 		 */
 		public function getData($field_id=null, $asObject=false){
 			if(!$field_id) return $this->_data;
@@ -225,7 +227,7 @@
 		}
 
 		/**
-		 * Iterates over all the Fields in this Entry calling their 
+		 * Iterates over all the Fields in this Entry calling their
 		 * `processRawFieldData()` function to set default values for this Entry.
 		 *
 		 * @see toolkit.Field#processRawFieldData()
@@ -241,8 +243,11 @@
 				$this->setData($field->get('field_id'), $result);
 			}
 
-			if(!$this->get('creation_date')) $this->set('creation_date', DateTimeObj::get('c'));
-			if(!$this->get('creation_date_gmt')) $this->set('creation_date_gmt', DateTimeObj::getGMT('c'));
+			$this->set('modification_date', DateTimeObj::get('c'));
+			$this->set('modification_date_gmt', DateTimeObj::getGMT('c'));
+
+			if(!$this->get('creation_date')) $this->set('creation_date', $this->get('modification_date'));
+			if(!$this->get('creation_date_gmt')) $this->set('creation_date_gmt', $this->get('modification_date_gmt'));
 		}
 
 		/**

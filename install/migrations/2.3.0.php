@@ -23,11 +23,11 @@
 		}
 
 		static function getVersion(){
-			return '2.3RC2';
+			return '2.3';
 		}
 
 		static function getReleaseNotes(){
-			return 'https://gist.github.com/1162216';
+			return 'http://symphony-cms.com/download/releases/version/2.3/';
 		}
 
 		static function upgrade(){
@@ -198,17 +198,17 @@
 
 					Symphony::Database()->query("OPTIMIZE TABLE " . $table);
 				}
+			}
 
-				// Update the version information
-				Symphony::Configuration()->set('version', self::getVersion(), 'symphony');
-				Symphony::Configuration()->set('useragent', 'Symphony/' . self::getVersion(), 'general');
+			// Update the version information
+			Symphony::Configuration()->set('version', self::getVersion(), 'symphony');
+			Symphony::Configuration()->set('useragent', 'Symphony/' . self::getVersion(), 'general');
 
-				if(Symphony::Configuration()->write() === false) {
-					throw new Exception('Failed to write configuration file, please check the file permissions.');
-				}
-				else {
-					return true;
-				}
+			if(Symphony::Configuration()->write() === false) {
+				throw new Exception('Failed to write configuration file, please check the file permissions.');
+			}
+			else {
+				return true;
 			}
 		}
 
