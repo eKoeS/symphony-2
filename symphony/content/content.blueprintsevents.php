@@ -8,6 +8,7 @@
 	 * allow Frontend forms to populate Sections or edit Entries.
 	 */
 	require_once(TOOLKIT . '/class.resourcespage.php');
+	require_once FACE . '/interface.provider.php';
 
 	Class contentBlueprintsEvents extends ResourcesPage {
 
@@ -69,7 +70,7 @@
 
 			$isEditing = ($readonly ? true : false);
 			$fields = array();
-			$providers = Symphony::ExtensionManager()->getProvidersOf('events');
+			$providers = Symphony::ExtensionManager()->getProvidersOf(iProvider::EVENT);
 
 			if(isset($_POST['fields'])) {
 				$fields = $_POST['fields'];
@@ -286,8 +287,13 @@
 				$fieldset->setAttribute('class', 'settings');
 
 				$doc = $existing->documentation();
-				$fieldset->setValue('<legend>' . __('Description') . '</legend>' . PHP_EOL . General::tabsToSpaces((is_object($doc) ? $doc->generate(true) : $doc), 2));
-				$this->Form->appendChild($fieldset);
+				if($doc) {
+					$fieldset->setValue(
+						'<legend>' . __('Description') . '</legend>' . PHP_EOL .
+						General::tabsToSpaces(is_object($doc) ? $doc->generate(true) : $doc, 2)
+					);
+					$this->Form->appendChild($fieldset);
+				}
 			}
 
 			$div = new XMLElement('div');
@@ -355,7 +361,7 @@
 		public function __formAction() {
 			$fields = $_POST['fields'];
 			$this->_errors = array();
-			$providers = Symphony::ExtensionManager()->getProvidersOf('events');
+			$providers = Symphony::ExtensionManager()->getProvidersOf(iProvider::EVENT);
 			$providerClass = null;
 
 			if(trim($fields['name']) == '') $this->_errors['name'] = __('This is a required field');
